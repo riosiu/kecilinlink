@@ -1,7 +1,25 @@
 import { Elysia } from "elysia";
+import { LinkTabel, configDB, pool } from "./config/db";
+import { createShortLinks } from "./handlers/link";
 
-const app = new Elysia().get("/", () => "Hello Elysia").listen(3000);
+const startServer = async () => {
+  try {
+    await configDB()
+    const app = new Elysia()
 
-console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-);
+    app.group('/api', api => {
+      return api
+        .post('/create-link', ({ body, set }) => createShortLinks(body as { url: string, shortlink: string }))
+
+        .get('/', () => {
+          Response.json({
+            message: 'Welcome to the Link Shortener API'
+          })
+        })
+    })
+    app.listen(8888, () => { console.log('Server is running on port 8888') })
+  } catch (error) {
+    console.log(error)
+  }
+}
+await startServer()

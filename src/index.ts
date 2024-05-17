@@ -1,12 +1,12 @@
 import { Elysia } from "elysia";
 import { LinkTabel, configDB, pool } from "./config/db";
-import { createShortLinks } from "./handlers/link";
+import { createShortLinks, redirectLinks } from "./handlers/link";
 
 const startServer = async () => {
   try {
     await configDB()
     const app = new Elysia()
-
+    app.get('/:shortlink', ({ params: { shortlink } }) => redirectLinks(shortlink))
     app.group('/api', api => {
       return api
         .post('/create-link', ({ body, set }) => createShortLinks(body as { url: string, shortlink: string }))

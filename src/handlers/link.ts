@@ -9,7 +9,6 @@ export const createShortLinks = async ({ url, shortlink }: { url: string, shortl
         })
     }
 
-
     try {
         const existingShortlink = await pool.query(
             `SELECT * FROM links WHERE shortlink = $1`, [shortlink]
@@ -26,6 +25,22 @@ export const createShortLinks = async ({ url, shortlink }: { url: string, shortl
             message: 'Link created successfully',
             data: createLink.rows[0],
         })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const redirectLinks = async (shortlink: string) => {
+
+    try {
+        const findShortLink = await pool.query(`SELECT * FROM links WHERE shortlink = $1`, [shortlink])
+        if (findShortLink.rows.length === 0) {
+            return Response.json({
+                message: 'Shortlink not found'
+            })
+        }
+        return Response.redirect(findShortLink.rows[0].url)
+
     } catch (error) {
         console.log(error)
     }

@@ -1,7 +1,5 @@
 import { pool } from "../config/db"
 
-
-
 export const createShortLinks = async ({ url, shortlink }: { url: string, shortlink: string }) => {
     if (!url || !shortlink) {
         return Response.json({
@@ -31,7 +29,6 @@ export const createShortLinks = async ({ url, shortlink }: { url: string, shortl
 }
 
 export const redirectLinks = async (shortlink: string) => {
-
     try {
         const findShortLink = await pool.query(`SELECT * FROM links WHERE shortlink = $1`, [shortlink])
         if (findShortLink.rows.length === 0) {

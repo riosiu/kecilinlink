@@ -1,19 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
-    
-</head>
-<body>
-    <main>
-        <section>
-            <button hx-get="/api/hello">Click Me</button>
-        </section>
-        <span>Hello World</span>
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <title>Document</title>
+  </head>
+  <body class="min-h-screen w-full">
+    <header class="p-4 border-b-2">
+      <nav class="flex justify-between">
+        <span>Kecilink</span>
+        <ul class="flex space-x-4">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="m-auto mx-10 flex">
+      <section class="my-24 m-auto">
+        <div class="flex flex-col">
+          <div class="flex flex-col gap-2">
+            <span class="text-2xl font-bold text-cyan-500"
+              >Kecilin tautan kamu,</span
+            >
+            <span class="text-2xl font-extrabold">Agar mudah diingat :)</span>
+          </div>
+          <span class="text-xl mt-4 text-gray-400"
+            >Gunakan sesukamu, tapi ingat jika ada yang sudah ada gunakan yang
+            lain ya</span
+          >
+        </div>
+        <form
+          hx-target="#result"
+          hx-post="http://localhost:8888/api/create-link"
+          class="flex gap-4 mt-5"
+        >
+          <input
+            name="url"
+            type="text"
+            placeholder="isi link kamu"
+            class="p-4"
+          />
+          <input
+            name="shortlink"
+            type="text"
+            placeholder="pilih link kecil kamu (ex. kcl.link/google)"
+            class="p-4"
+          />
+          <button type="submit" class="bg-cyan-500 w-full rounded-md hover:">
+            Submit
+          </button>
+        </form>
+
+        <div id="result">
+          <span></span>
+        </div>
+      </section>
     </main>
-</body>
+
+    <footer
+      class="bottom-0 mt-auto absolute items-center flex justify-center w-full p-4"
+    >
+      <p>&copy; 2021 Kecilink</p>
+    </footer>
+  </body>
+  <script>
+    document.body.addEventListener("htmx:afterRequest", (e) => {
+      const res = JSON.parse(e.detail.xhr.responseText);
+      if (res.meesage === "Link created successfully") {
+        document.getElementById(
+          "result"
+        ).innerText = `Shortlink: ${response.data.shortlink}`;
+      }
+    });
+  </script>
 </html>

@@ -16,7 +16,10 @@ const app = new Elysia()
       .post('/create-link', ({ body, set }) => createShortLinks(body as { url: string, shortlink: string }))
   })
 
-app.get("/", () => HTMLPages())
+// app.get("/", () => HTMLPages())
+app.get("/", () => {
+  return new Response(Bun.file('./src/index.html'))
+})
 
 const startServer = async () => {
   try {

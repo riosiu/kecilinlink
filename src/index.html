@@ -3,11 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        content: ["./src/**/*.{html,js}"],
+        theme: {
+          extend: {},
+          screens: {
+            phone: { max: "768px" },
+          },
+        },
+        plugins: [],
+      };
+    </script>
     <title>Document</title>
+    <link href="./output.css" rel="stylesheet" />
   </head>
-  <body class="min-h-screen w-full">
+  <body class="">
     <header class="p-4 border-b-2">
       <nav class="flex justify-between">
         <span>Kecilink</span>
@@ -18,63 +31,61 @@
         </ul>
       </nav>
     </header>
-
-    <main class="m-auto mx-10 flex">
-      <section class="my-24 m-auto">
+    <main class="w-auto mx-12 my-5">
+      <section class="p-4 m-auto my-24">
         <div class="flex flex-col">
           <div class="flex flex-col gap-2">
-            <span class="text-2xl font-bold text-cyan-500"
-              >Kecilin tautan kamu,</span
-            >
+            <span class="text-2xl font-bold text-cyan-500">
+              Kecilin tautan kamu,
+            </span>
             <span class="text-2xl font-extrabold">Agar mudah diingat :)</span>
           </div>
-          <span class="text-xl mt-4 text-gray-400"
-            >Gunakan sesukamu, tapi ingat jika ada yang sudah ada gunakan yang
-            lain ya</span
-          >
+          <span class="mt-4 text-xl text-gray-400">
+            Gunakan sesukamu, tapi ingat jika ada yang sudah ada gunakan yang
+            lain ya
+          </span>
         </div>
         <form
           hx-target="#result"
           hx-post="http://localhost:8888/api/create-link"
-          class="flex gap-4 mt-5"
+          class="flex flex-col gap-4 mt-5"
         >
-          <input
-            name="url"
-            type="text"
-            placeholder="isi link kamu"
-            class="p-4"
-          />
-          <input
-            name="shortlink"
-            type="text"
-            placeholder="pilih link kecil kamu (ex. kcl.link/google)"
-            class="p-4"
-          />
-          <button type="submit" class="bg-cyan-500 w-full rounded-md hover:">
+          <div class="flex flex-row gap-4 phone:flex-col phone:space-y-4">
+            <input
+              name="url"
+              type="text"
+              placeholder="isi link kamu"
+              class="p-4 border rounded"
+            />
+            <input
+              name="shortlink"
+              type="text"
+              placeholder="pilih link kecil kamu (ex. kcl.link/google)"
+              class="p-4 border rounded"
+            />
+          </div>
+          <a href="" target="_blank" id="result" class="p-4 rounded"> </a>
+          <button
+            type="submit"
+            class="w-24 p-4 rounded-md phone:w-auto bg-cyan-500 hover:bg-cyan-700"
+          >
             Submit
           </button>
         </form>
-
-        <div id="result">
-          <span></span>
-        </div>
       </section>
     </main>
-
-    <footer
-      class="bottom-0 mt-auto absolute items-center flex justify-center w-full p-4"
-    >
-      <p>&copy; 2021 Kecilink</p>
-    </footer>
+    <script>
+      document.body.addEventListener("htmx:afterRequest", (e) => {
+        const res = JSON.parse(e.detail.xhr.responseText);
+        if (res.message === "Link created successfully") {
+          document.getElementById(
+            "result"
+          ).innerText = `Shortlink: https://kcl.link/${res.data.shortlink}`;
+          document.getElementById(
+            "result"
+          ).href = `https://kcl.link/${res.data.shortlink}`;
+        }
+      });
+    </script>
   </body>
-  <script>
-    document.body.addEventListener("htmx:afterRequest", (e) => {
-      const res = JSON.parse(e.detail.xhr.responseText);
-      if (res.meesage === "Link created successfully") {
-        document.getElementById(
-          "result"
-        ).innerText = `Shortlink: ${response.data.shortlink}`;
-      }
-    });
-  </script>
 </html>

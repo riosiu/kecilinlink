@@ -35,3 +35,4 @@ export const configDB = async () => {
 
     await LinkTabel()
 }
+

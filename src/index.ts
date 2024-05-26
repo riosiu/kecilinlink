@@ -3,8 +3,6 @@ import { LinkTabel, configDB, pool } from "./config/db";
 import { createShortLinks, redirectLinks } from "./handlers/link";
 import { html } from "@elysiajs/html";
 import { staticPlugin } from '@elysiajs/static'
-import { HTMLPages } from "./html";
-
 
 const app = new Elysia()
   .use(html())
@@ -16,9 +14,9 @@ const app = new Elysia()
       .post('/create-link', ({ body, set }) => createShortLinks(body as { url: string, shortlink: string }))
   })
 
-// app.get("/", () => HTMLPages())
+
 app.get("/", () => {
-  return new Response(Bun.file('./src/index.html'))
+  return Bun.file('./src/index.html')
 })
 
 const startServer = async () => {

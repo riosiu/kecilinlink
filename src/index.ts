@@ -22,7 +22,7 @@ app.get("/", () => {
 const startServer = async () => {
   try {
     await configDB()
-    app.listen(8888, () => { console.log('Server is running on port 8888') })
+    app.listen(8880, () => { console.log('Server is running on port 8880') })
   } catch (error) {
     console.log(error)
   }

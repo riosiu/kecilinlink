@@ -100,7 +100,7 @@
         document.body.addEventListener("htmx:afterRequest", (e) => {
           const res = JSON.parse(e.detail.xhr.responseText);
           if (res.message === "Link created successfully") {
-            link.innerText = `Shortlink: https://kcl.link/${res.data.shortlink}`;
+            link.innerText = `Shortlink: https://kecilink.pw/${res.data.shortlink}`;
             link.href = `https://kecilink.pw/${res.data.shortlink}`;
             link.style.display = "block"; // Tampilkan elemen #result
           }

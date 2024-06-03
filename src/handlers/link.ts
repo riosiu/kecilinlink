@@ -4,6 +4,8 @@ export const createShortLinks = async ({ url, shortlink }: { url: string, shortl
     if (!url || !shortlink) {
         return Response.json({
             message: 'URL and shortlink are required.'
+        }, {
+            status: 400
         })
     }
 
@@ -14,7 +16,7 @@ export const createShortLinks = async ({ url, shortlink }: { url: string, shortl
         if (existingShortlink.rows.length > 0) {
             return Response.json({
                 message: 'Shortlink already exists'
-            })
+            }, { status: 400 })
         }
         const createLink = await pool.query(
             `INSERT INTO links (url, shortlink) VALUES ($1, $2) RETURNING *`, [url, shortlink]
@@ -22,6 +24,8 @@ export const createShortLinks = async ({ url, shortlink }: { url: string, shortl
         return Response.json({
             message: 'Link created successfully',
             data: createLink.rows[0],
+        }, {
+            status: 201
         })
     } catch (error) {
         console.log(error)
